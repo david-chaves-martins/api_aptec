@@ -156,11 +156,13 @@ import jakarta.persistence.Table; // Importação da anotação Table para espec
 import jakarta.validation.constraints.NotBlank; // Importação da anotação NotBlank para validar campos não vazios
 import jakarta.validation.constraints.Size; // Importação da anotação Size para validar limites de tamanho
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.context.annotation.Profile;
 import tarefas02.api.models.enums.ProfileEnums;
 
-
+@Getter @Setter
 @Entity
 @Table(name = User.TABLE_NAME)
 @AllArgsConstructor
