@@ -11,7 +11,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+/*
 @Entity
 @Table(name = Task.TABLE_NAME)
 public class Task {
@@ -78,4 +81,31 @@ public class Task {
     public int hashCode() {
         return Objects.hash(id, user, description);
     }
+}
+
+ */
+
+@Entity
+@Table (name = Task.TABLE_NAME)
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+
+public class Task{
+    public static final String TABLE_NAME = "task";
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false, updatable = false)
+    private User user;
+
+    @Column(name = "description",length = 250, nullable = false)
+    @NotBlank
+    @Size(min = 1, max = 250)
+    private String description;
+
 }

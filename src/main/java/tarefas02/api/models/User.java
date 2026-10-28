@@ -1,4 +1,4 @@
-
+/*
 
 package tarefas02.api.models; // Declaração do pacote onde a classe está localizada
 
@@ -128,5 +128,85 @@ public class User { // Declaração da classe pública User
     @Override // Indica a sobrescrita do método hashCode da classe genérica Object
     public int hashCode() { // Método para gerar um código hash para a instância
         return Objects.hash(this.id, this.username, this.password); // Gera e devolve o hash baseado nos atributos id, username e password
+    }
+}
+
+ */
+
+package tarefas02.api.models;
+import java.util.ArrayList; // Importação da classe ArrayList para manipular listas dinâmicas
+import java.util.HashSet; // Importação da classe HashSet para manipular conjuntos sem elementos duplicados
+import java.util.List; // Importação da interface List
+import java.util.Objects; // Importação da classe utilitária Objects para comparações e geração de hash
+import java.util.Set; // Importação da interface Set
+import java.util.stream.Collectors; // Importação da classe Collectors para recolher dados de Streams
+
+import com.fasterxml.jackson.annotation.JsonProperty; // Importação da anotação JsonProperty para mapeamento JSON
+import com.fasterxml.jackson.annotation.JsonProperty.Access; // Importação da enumeração Access para controlar acessos de leitura/escrita no JSON
+import jakarta.persistence.CollectionTable; // Importação da anotação CollectionTable para configurar a tabela auxiliar do JPA
+import jakarta.persistence.Column; // Importação da anotação Column para mapear colunas da base de dados
+import jakarta.persistence.ElementCollection; // Importação da anotação ElementCollection para coleções de elementos simples
+import jakarta.persistence.Entity; // Importação da anotação Entity para indicar uma entidade JPA
+import jakarta.persistence.FetchType; // Importação da enumeração FetchType para definir a estratégia de carregamento
+import jakarta.persistence.GeneratedValue; // Importação da anotação GeneratedValue para estratégia de geração de ID
+import jakarta.persistence.GenerationType; // Importação da enumeração GenerationType para os tipos de geração de chave primária
+import jakarta.persistence.Id; // Importação da anotação Id para identificar a chave primária
+import jakarta.persistence.OneToMany; // Importação da anotação OneToMany para relacionamentos de um-para-muitos
+import jakarta.persistence.Table; // Importação da anotação Table para especificar o nome da tabela
+import jakarta.validation.constraints.NotBlank; // Importação da anotação NotBlank para validar campos não vazios
+import jakarta.validation.constraints.Size; // Importação da anotação Size para validar limites de tamanho
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.springframework.context.annotation.Profile;
+import tarefas02.api.models.enums.ProfileEnums;
+
+
+@Entity
+@Table(name = User.TABLE_NAME)
+@AllArgsConstructor
+@NoArgsConstructor
+
+public class User{
+    public static final String TABLE_NAME = "user";
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true)
+    private Long id;
+
+    @Column (name = "username", length = 100, nullable = false, unique = true)
+    @NotBlank
+    @Size(min = 2, max = 100)
+    private String username;
+
+    @JsonProperty(access = Access.WRITE_ONLY)
+    @Column(name= "password", length = 60, nullable = false)
+    @NotBlank
+    @Size(min = 8, max = 60)
+    private String password;
+
+    @OneToMany(mappedBy = "user")
+    @JsonProperty(access = Access.WRITE_ONLY)
+    private List<Task> tasks = new ArrayList<>();
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_profile")
+    private Set<Integer> profiles = new HashSet<>();
+
+    public User(Long id, String username, String password) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        addProfile(ProfileEnums.USER);
+    }
+
+    public Set<ProfileEnums> getProfiles() {
+        return this.profiles.stream()
+                .map(x-> ProfileEnums.toEnum(x))
+                .collect(Collectors.toSet());
+    }
+
+    public void addProfile(ProfileEnums profile) {
+        this.profiles.add(profile.getCode());
     }
 }
