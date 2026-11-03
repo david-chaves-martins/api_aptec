@@ -1,5 +1,5 @@
-/*
 
+/* 
 package tarefas02.api.models; // Declaração do pacote onde a classe está localizada
 
 import java.util.ArrayList; // Importação da classe ArrayList para manipular listas dinâmicas
@@ -130,10 +130,10 @@ public class User { // Declaração da classe pública User
         return Objects.hash(this.id, this.username, this.password); // Gera e devolve o hash baseado nos atributos id, username e password
     }
 }
-
- */
+    */
 
 package tarefas02.api.models;
+
 import java.util.ArrayList; // Importação da classe ArrayList para manipular listas dinâmicas
 import java.util.HashSet; // Importação da classe HashSet para manipular conjuntos sem elementos duplicados
 import java.util.List; // Importação da interface List
@@ -143,6 +143,7 @@ import java.util.stream.Collectors; // Importação da classe Collectors para re
 
 import com.fasterxml.jackson.annotation.JsonProperty; // Importação da anotação JsonProperty para mapeamento JSON
 import com.fasterxml.jackson.annotation.JsonProperty.Access; // Importação da enumeração Access para controlar acessos de leitura/escrita no JSON
+
 import jakarta.persistence.CollectionTable; // Importação da anotação CollectionTable para configurar a tabela auxiliar do JPA
 import jakarta.persistence.Column; // Importação da anotação Column para mapear colunas da base de dados
 import jakarta.persistence.ElementCollection; // Importação da anotação ElementCollection para coleções de elementos simples
@@ -155,60 +156,60 @@ import jakarta.persistence.OneToMany; // Importação da anotação OneToMany pa
 import jakarta.persistence.Table; // Importação da anotação Table para especificar o nome da tabela
 import jakarta.validation.constraints.NotBlank; // Importação da anotação NotBlank para validar campos não vazios
 import jakarta.validation.constraints.Size; // Importação da anotação Size para validar limites de tamanho
+import tarefas02.api.models.enums.ProfileEnums; // Importação do enumerador de perfis do projeto
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.context.annotation.Profile;
-import tarefas02.api.models.enums.ProfileEnums;
 
-@Getter @Setter
-@Entity
+@Entity 
 @Table(name = User.TABLE_NAME)
-@AllArgsConstructor
-@NoArgsConstructor
+@AllArgsConstructor 
+@NoArgsConstructor 
+@Data 
 
-public class User{
-    public static final String TABLE_NAME = "user";
+public class User {
 
-    @Id
+    public  static final String TABLE_NAME = "user";
+
+    @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
     private Long id;
 
     @Column (name = "username", length = 100, nullable = false, unique = true)
-    @NotBlank
+    @NotBlank 
     @Size(min = 2, max = 100)
     private String username;
 
     @JsonProperty(access = Access.WRITE_ONLY)
-    @Column(name= "password", length = 60, nullable = false)
-    @NotBlank
-    @Size(min = 8, max = 60)
+    @Column(name = "password", length = 60, nullable = false)
+    @NotBlank 
+    @Size (min = 8, max = 60)
     private String password;
 
     @OneToMany(mappedBy = "user")
     @JsonProperty(access = Access.WRITE_ONLY)
     private List<Task> tasks = new ArrayList<>();
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch =  FetchType.EAGER)
     @CollectionTable(name = "user_profile")
+    @Column(name = "profile", nullable = false)
     private Set<Integer> profiles = new HashSet<>();
 
-    public User(Long id, String username, String password) {
+    public User(Long id, String username, String password){
         this.id = id;
         this.username = username;
         this.password = password;
         addProfile(ProfileEnums.USER);
     }
 
-    public Set<ProfileEnums> getProfiles() {
+    public Set<ProfileEnums> getProfiles(){
         return this.profiles.stream()
-                .map(x-> ProfileEnums.toEnum(x))
-                .collect(Collectors.toSet());
+            .map(x-> ProfileEnums.toEnum(x))
+            .collect(Collectors.toSet());
     }
 
-    public void addProfile(ProfileEnums profile) {
+    public void addProfile(ProfileEnums profile){
         this.profiles.add(profile.getCode());
-    }
+    }  
 }

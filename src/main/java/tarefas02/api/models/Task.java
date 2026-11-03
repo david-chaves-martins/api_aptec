@@ -14,7 +14,8 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-/*
+
+/* 
 @Entity
 @Table(name = Task.TABLE_NAME)
 public class Task {
@@ -82,30 +83,31 @@ public class Task {
         return Objects.hash(id, user, description);
     }
 }
+    */
 
- */
-
-@Entity
+@Entity 
 @Table (name = Task.TABLE_NAME)
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
+@AllArgsConstructor 
+@NoArgsConstructor 
+@Data 
 
-public class Task{
-    public static final String TABLE_NAME = "task";
+public class Task {
 
-    @Id
+    public static  final String TABLE_NAME = "task";
+
+    @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column (name = "id", unique = true)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne 
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User user;
 
-    @Column(name = "description",length = 250, nullable = false)
-    @NotBlank
-    @Size(min = 1, max = 250)
+    @Column(name = "description", length = 250, nullable = false)
+    @NotBlank 
+    @Size (min = 1, max = 255)
     private String description;
+
 
 }

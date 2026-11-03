@@ -8,14 +8,15 @@ import org.springframework.security.core.context.SecurityContextHolder; // Acess
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder; // Utilitário de hash de senhas BCrypt
 import org.springframework.stereotype.Service; // Marca a classe como um serviço Spring
 import org.springframework.transaction.annotation.Transactional; // Gerencia o contexto transacional do banco
-import jakarta.validation.Valid;
 
+import jakarta.validation.Valid;
 import tarefas02.api.models.User; // Modelo da entidade User
+import tarefas02.api.models.dtos.UserCreateDTO;
+import tarefas02.api.models.dtos.UserUpdateDTO;
 import tarefas02.api.models.enums.ProfileEnums; // Enumerador com os perfis de acesso (ADMIN, USER)
 import tarefas02.api.repositories.UserRepository; // Repositório JPA para a entidade User
 import tarefas02.api.security.UserSpringSecurity; // Objeto de detalhes do usuário autenticado no Spring Security
 import tarefas02.api.exceptions.AuthorizationException; // Exceção de acesso negado
-import tarefas02.api.security.UserSpringSecurity;
 import tarefas02.api.services.exceptions.DataBindingViolationException; // Exceção de violação de vínculo de dados
 import tarefas02.api.services.exceptions.ObjectNotFoundException; // Exceção para objetos não encontrados
 
@@ -46,7 +47,7 @@ public class UserService {
     // Busca um usuário por ID aplicando a regra de autorização
     public User findById(Long id) {
         // Recupera o usuário logado
-        UserSpringSecurity  userSpringSecurity= authenticated();
+        UserSpringSecurity  userSpringSecurity = authenticated();
 
         // Se não houver usuário logado, ou se ele NÃO for ADMIN e tentar buscar um ID diferente do seu próprio ID
         if (Objects.isNull(userSpringSecurity) || !userSpringSecurity.hasRole(ProfileEnums.ADMIN) && !id.equals(userSpringSecurity.getId())) {
@@ -101,5 +102,20 @@ public class UserService {
             throw new DataBindingViolationException("Não é possível excluir pois há entidades relacionadas!");
         }
     }
-    // paramos aqui
+
+ // Converte o DTO de criação (UserCreateDTO) em uma Entidade User
+    public User fromDTO(@Valid UserCreateDTO obj) {
+        User user = new User();
+        user.setUsername(obj.getUsername());
+        user.setPassword(obj.getPassword());
+        return user;
+    }
+
+    // Converte o DTO de atualização (UserUpdateDTO) em uma Entidade User
+    public User fromDTO(@Valid UserUpdateDTO obj) {
+        User user = new User();
+        user.setId(obj.getId());
+        user.setPassword(obj.getPassword());
+        return user;
+    }
 }

@@ -39,7 +39,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 } */
 
 
-    package tarefas02.api.repositories;
+package tarefas02.api.repositories;
 
 import java.util.List;
 
