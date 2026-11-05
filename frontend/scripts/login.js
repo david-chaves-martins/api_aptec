@@ -1,59 +1,43 @@
-// URL base da API Spring Boot
+// CORRIGIDO: removido o formato de link Markdown e mantida apenas a URL.
 const API_URL = "http://localhost:8080";
 
-// Função assíncrona responsável por processar o login do usuário
 async function login(event) {
-    event.preventDefault(); // Impede o comportamento padrão do formulário de recarregar a página ao submeter
+    event.preventDefault();
 
-    // Captura os elementos de entrada da tela de login
-    const usernameInput = document.getElementById("username");
-    const passwordInput = document.getElementById("password");
-
-    // Validação de preenchimento dos campos
-    if (!usernameInput.value || !passwordInput.value) {
-        alert("Por favor, preencha o usuário e a senha.");
-        return;
-    }
+    const usernameInput = document.getElementById("username").value;
+    const passwordInput = document.getElementById("password").value;
 
     try {
-        // Realiza a requisição POST para o endpoint /login da API Spring Boot
         const response = await fetch(`${API_URL}/login`, {
-            method: "POST", // Método HTTP de login
+            method: "POST",
             headers: {
-                "Content-Type": "application/json", // Informa que o corpo enviado é do tipo JSON
-                "Accept": "application/json" // Informa que aceita respostas em JSON
+                "Content-Type": "application/json",
+                "Accept": "application/json",
             },
-            // Converte o objeto JavaScript com as credenciais para uma String JSON
             body: JSON.stringify({
-                username: usernameInput.value,
-                password: passwordInput.value
+                username: usernameInput,
+                password: passwordInput
             })
         });
 
-        // Verifica se a requisição foi processada com sucesso (Status 200 OK)
         if (response.ok) {
-            // Extrai o token JWT retornado no cabeçalho 'Authorization' da resposta
-            const token = response.headers.get("Authorization");
+            const token = response.headers.get("Authentication");
 
-            // Se o token foi retornado com sucesso
             if (token) {
-                // Armazena a chave 'Authorization' e a String do token no localStorage do navegador
                 localStorage.setItem("Authorization", token);
 
-                alert("Login realizado com sucesso!"); // Notificação visual de sucesso
+                alert("Login realizado com sucesso!");
 
-                // Redireciona o usuário para a página principal das tarefas
+                // CORRIGIDO: removida a barra invertida antes de location.
                 window.location.href = "index.html";
+
             } else {
-                alert("Erro: Token não retornado pelo servidor.");
+                alert("Usuario ou senha invalidos");
             }
-        } else {
-            // Exibe mensagem caso as credenciais sejam inválidas (ex: erro 401 ou 403)
-            alert("Usuário ou senha inválidos!");
         }
+
+        // CORRIGIDO: catch deve ficar ligado ao try, com a sintaxe catch (error).
     } catch (error) {
-        // Captura e exibe erros de conexão com o servidor
-        console.error("Erro na requisição de login:", error);
-        alert("Erro ao conectar com o servidor.");
+        console.error("Erro na requisição de login ", error);
     }
 }

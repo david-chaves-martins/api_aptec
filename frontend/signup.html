@@ -1,53 +1,111 @@
-<!DOCTYPE html> <!-- Define a especificação HTML5 do documento -->
-<html lang="pt-br"> <!-- Define o idioma como Português do Brasil -->
+
+<!DOCTYPE html>
+<!-- Define que o documento utiliza HTML5 -->
+
+<html lang="pt-br">
+<!-- Define o idioma da página como português brasileiro -->
 
 <head>
-    <meta charset="UTF-8"> <!-- Configura a codificação UTF-8 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Define viewport responsiva -->
-    <title>Cadastro - Gerenciador de Tarefas</title> <!-- Título exibido na aba do navegador -->
-    
-    <!-- Estilização CSS via Bootstrap 5 -->
+    <!-- Define a codificação de caracteres para aceitar acentos -->
+    <meta charset="UTF-8">
+
+    <!-- Configura a página para se adaptar ao tamanho da tela -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Define o título que aparece na aba do navegador -->
+    <title>Cadastro - Gerenciador de Tarefas</title>
+
+    <!-- Importa o Bootstrap para utilizar seus estilos e componentes -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
 </head>
 
-<body class="bg-light d-flex align-items-center vh-100"> <!-- Centralização vertical e horizontal da tela -->
+<!-- Início do corpo da página -->
+<!-- bg-light: fundo claro
+     d-flex: ativa o Flexbox
+     align-items-center: centraliza verticalmente
+     vh-100: ocupa 100% da altura da tela -->
+<body class="bg-light d-flex align-items-center vh-100">
 
-    <div class="container"> <!-- Container Bootstrap -->
-        <div class="row justify-content-center"> <!-- Centralização da linha -->
-            <div class="col-md-4"> <!-- Coluna responsiva para o formulário -->
-                <div class="card shadow-sm"> <!-- Cartão com sombra leve -->
-                    <div class="card-body p-4"> <!-- Espaçamento interno do cartão -->
-                        <h3 class="text-center mb-4">Cadastrar</h3> <!-- Título da tela de cadastro -->
+<!-- Container principal que organiza o conteúdo -->
+<div class="container">
 
-                        <!-- Formulário de cadastro de usuário acionando a função signup() -->
-                        <form onsubmit="signup(event)">
-                            
-                            <div class="mb-3"> <!-- Entrada do nome de usuário -->
-                                <label for="username" class="form-label">Usuário</label> <!-- Rótulo do campo -->
-                                <input type="text" id="username" class="form-control" placeholder="Escolha um usuário" required> <!-- Campo obrigatório -->
-                            </div>
+    <!-- Cria uma linha e centraliza seu conteúdo horizontalmente -->
+    <div class="row justify-content-center">
 
-                            <div class="mb-3"> <!-- Entrada da senha -->
-                                <label for="password" class="form-label">Senha</label> <!-- Rótulo do campo -->
-                                <input type="password" id="password" class="form-control" placeholder="Escolha uma senha" required> <!-- Campo de senha obrigatório -->
-                            </div>
+        <!-- Define a largura do conteúdo conforme o tamanho da tela -->
+        <div class="col-12 col-sm-10 col-md-6 col-lg-4">
 
-                            <!-- Botão de confirmação de cadastro -->
-                            <button type="submit" class="btn btn-success w-100 mb-3">Criar Conta</button>
-                        </form>
+            <!-- Cria um cartão com sombra -->
+            <div class="card shadow-sm">
 
-                        <!-- Link para retornar à tela de login -->
-                        <div class="text-center">
-                            <small>Já tem uma conta? <a href="login.html">Faça Login</a></small>
+                <!-- Define o espaçamento interno do cartão -->
+                <div class="card-body p-4">
+
+                    <!-- Título do formulário -->
+                    <h3 class="text-center mb-4">Criar Conta</h3>
+
+                    <!-- Formulário que executa a função signup ao ser enviado -->
+                    <form onsubmit="signup(event)">
+
+                        <!-- Campo de usuário -->
+                        <div class="mb-3">
+
+                            <!-- Identifica o campo username -->
+                            <label for="username" class="form-label">Usuário</label>
+
+                            <!-- Campo onde o usuário digita seu nome de usuário -->
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    id="username"
+                                    placeholder="Escolha um usuário"
+                                    required
+                            >
                         </div>
+
+                        <!-- Campo de senha -->
+                        <div class="mb-3">
+
+                            <!-- Identifica o campo password -->
+                            <label for="password" class="form-label">Senha</label>
+
+                            <!-- Campo de senha: os caracteres ficam ocultos -->
+                            <input
+                                    type="password"
+                                    class="form-control"
+                                    id="password"
+                                    placeholder="Escolha uma senha"
+                                    required
+                            >
+                        </div>
+
+                        <!-- Botão responsável por enviar o formulário -->
+                        <button type="submit" class="btn btn-success w-100 mb-3">
+                            Criar Conta
+                        </button>
+
+                    </form>
+
+                    <!-- Área centralizada para direcionar ao login -->
+                    <div class="text-center">
+
+                        <!-- Link para a página de login -->
+                        <small>
+                            Já tem uma conta?
+                            <a href="login.htm">Faça login</a>
+                        </small>
+
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Importação do script exclusivo da lógica de cadastro de usuários -->
-    <script src="scripts/signup.js"></script>
+<!-- Importa o arquivo JavaScript responsável pelo cadastro -->
+<script src="scripts/signup.js"></script>
+
 </body>
-
 </html>
